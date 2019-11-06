@@ -22,15 +22,15 @@ import paddle.fluid as fluid
 from paddle.fluid.initializer import NormalInitializer
 
 
-def lex_net(word, args, vocab_size, num_labels, for_infer=True, target=None):
+def lex_net(word, args, vocab_size, num_labels, target=None):
     """
     define the lexical analysis network structure
-    word: stores the input of the model
-    for_infer: a boolean value, indicating if the model to be created is for training or predicting.
+    word: the input of the model
+    target: the label, for inferring set it to None
 
     return:
-        for infer: return the prediction
-        otherwise: return the prediction
+        target=None: return the prediction
+        otherwise: return the loss and prediction
     """
     word_emb_dim = args.word_emb_dim
     grnn_hidden_dim = args.grnn_hidden_dim
@@ -131,9 +131,4 @@ def lex_net(word, args, vocab_size, num_labels, for_infer=True, target=None):
 
         return crf_decode
 
-    if for_infer:
-        return _net_conf(word)
-
-    else:
-        # assert target != None, "target is necessary for training"
-        return _net_conf(word, target)
+    return _net_conf(word, target)

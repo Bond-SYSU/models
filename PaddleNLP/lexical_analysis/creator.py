@@ -42,7 +42,7 @@ def create_model(args, vocab_size, num_labels, mode='train'):
     # for inference process
     if mode == 'infer':
         crf_decode = nets.lex_net(
-            words, args, vocab_size, num_labels, for_infer=True, target=None)
+            words, args, vocab_size, num_labels, target=None)
         return {
             "feed_list": [words],
             "words": words,
@@ -51,7 +51,7 @@ def create_model(args, vocab_size, num_labels, mode='train'):
 
     # for test or train process
     avg_cost, crf_decode = nets.lex_net(
-        words, args, vocab_size, num_labels, for_infer=False, target=targets)
+        words, args, vocab_size, num_labels, target=targets)
 
     (precision, recall, f1_score, num_infer_chunks, num_label_chunks,
      num_correct_chunks) = fluid.layers.chunk_eval(
